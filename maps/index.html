@@ -1,0 +1,491 @@
+<style>
+    @keyframes block {
+        0%{
+            width:0px;
+            
+
+        }
+        100%{
+
+        }
+    }
+    .upbar{
+        width:100%;
+        background-color: grey;
+        height:40px;
+        overflow: hidden;
+    }
+    .lrcontainer{
+        border:solid 1px gray;
+        width:80%;
+        height:calc(100% - 42px);
+        float:left;
+        overflow:scroll;
+        position:relative;
+
+    }
+    .linerender{
+        border:none;
+        outline:none;
+        width:100%;
+        height:100%;
+
+    }
+    .tools{
+        background: rgb(29, 29, 29);
+        border:groove 1px;
+        padding:10px;
+        box-sizing: border-box;
+        height:calc(100% - 42px);
+        float: right;
+        width:calc(20% - 4px)
+    }
+    
+    .title{
+        margin: 9px;
+        font-size: 20px;
+        width: fit-content;
+        font-family: arial;
+
+    }
+    .title:hover{
+        background-color: white;
+        
+        border:solid 1px black;
+    }
+    .prop>*{
+        color:rgb(105, 105, 105);
+        font-family:"Courier New";
+        margin:5px;
+        margin-right:auto;
+        margin-left:auto;
+        float:left;
+        
+    }
+    .prop>input{
+        float:right
+    }
+
+    .prop{
+        width:100%;
+        height:50px;
+        box-sizing: border-box;
+        overflow: hidden;
+        
+    }
+    
+    input[type=text]{
+        width:100%;
+    }
+
+    
+    html,body{margin:0}
+    input,textarea{
+        border-radius: 5px;
+        border:solid 1px rgb(105, 105, 105);
+        outline:none;
+        background-color: rgb(29, 29, 29);
+        resize: none;
+    }
+    input:hover,textarea:hover{
+        background-color: rgb(81, 90, 141);
+        color:white;
+    }
+    input:hover,textarea:hover:focus{
+        background-color: white;
+        color:black
+    }
+    *{transition:all cubic-bezier(1,0,0,1.37) 200ms;}
+    .block{
+        position:absolute;
+        animation:block 200ms cubic-bezier(1,0,0,1.37)
+    }
+    .line{
+        width:100%;
+        height:2px;
+        background-color:rgb(105, 105, 105);
+    }
+    .styledit{
+        height:20%;
+        width:100%;
+    }
+    .sel{
+        border:dashed rgb(105, 105, 105);
+        position:absolute;
+        pointer-events: none;
+    }
+    #delbtn{
+        border-right: solid 1px rgb(105, 105, 105);
+    }
+    #blocktools{
+        overflow: hidden;
+        border-radius: 7px;
+        background-color: rgb(29, 29, 29);
+        width:0px;
+        position:absolute;
+        height:0x;
+        transition: top 0s, left 0s, width 1s, height, 1s;
+    }
+    #frontedit{
+        z-index:2;
+        opacity: 1;
+        background:none;
+        outline:none;
+        position:absolute;
+        
+    }
+    #blockTools>*{
+        float:left;
+        overflow: hidden;
+    }
+</style>
+<input id=frontedit />
+<div class=upbar>
+    <div class=title>New map</div>
+</div>
+<div class=lrcontainer id=lrcontainer>
+    <canvas class=linerender id=linerender></canvas>
+</div>
+<div class=tools id=tools>
+    <div class=prop>
+        <label for="content">Texto</label><input id=content type=text />
+    </div>
+    
+    <div class=line></div>
+    
+    <div class=prop>
+        <label for="color">Cor</label><input id=color type=color />
+    </div>
+    <div class=prop>
+        <label for="tcolor">Cor do texto</label><input id=tcolor type=color />
+    </div>
+    <div class=styledit></div>
+</div>
+<div class=sel id=sel>
+
+</div>
+<div id=blockTools>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" id=delbtn>
+        
+         
+         <path id="svg_1" d="m371,264" opacity="NaN" stroke="#ffffff" fill="#fff"/>
+         <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="29.81223" x2="29.43724" y1="2.18777" x1="2.56276" stroke="#CE7975" fill="none"/>
+         <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="1.93777" x2="29.12475" y1="30.06223" x1="2.87525" stroke="#CE7975" fill="none"/>
+        </g>
+       
+       </svg>
+       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" id=connectionmanager>
+        <g>
+         
+         <path fill="#fff" stroke="#ffffff" opacity="NaN" d="m371,264" id="svg_1"/>
+         <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="24.34" x2="24.34" y1="7.66" x1="7.66" stroke="#ffffff" fill="none"/>
+         <ellipse ry="2" rx="2" id="svg_5" cy="6.375" cx="6.47917" stroke="#ffffff" fill="none"/>
+         <ellipse ry="1.90625" rx="1.90625" id="svg_6" cy="25.25" cx="25.4375" stroke="#ffffff" fill="#000000"/>
+        </g>
+       
+       </svg>
+</div>
+
+<script>
+    f=(e)=>{return document.getElementById(e)};cf=(e)=>{return document.getElementsByClassName(e)}
+    newMap=true;
+    sel=f("sel");
+    t=f("tools");
+    frontedit=f("frontedit")
+    tools={
+        content:f("content"),
+        connection:f("connectionmanager")
+    }
+
+    connecting=false;
+
+    bt=f("blockTools");
+    defaultStyle="font-size:20px;width:100px;height:20px;font-family:arial;background-color:blue"
+
+    lr=f("linerender");
+
+    lrc=f("lrcontainer")
+    connections=[]
+    //Data structure for every "block"/"topic"
+    class block{
+        connections = [];
+        x = 0;
+        y = 0;
+        content = "";
+        style = ""
+        constructor(x,y,content,connections,style){
+            this.content=content;
+            this.x=x;
+            this.y=y;
+            if(!connections){
+                this.connections=[]
+            }else{
+                this.connections=connections;
+            }
+            if(style){
+                this.style=style;
+            }else{
+                this.style=defaultStyle;
+            }
+            blocks.push(this);
+            reloadUi()
+        }
+    }
+    //Data structure for connections
+    class connection{
+        from={}
+        to={}
+        constructor(from,to){
+            this.from=from;
+            this.to=to;
+        }
+    }
+    //Reloads every element to its respected styling and positioning, does not change line rendering and does not reset user position
+    function reloadUi(){
+        //Check if missing blocks
+        if(blocks.length>blockElements.length){
+            //Create missing block elements
+            uBlockElements=[]
+            for(i=blockElements.length ; i<blocks.length ; i++){
+
+                nb=document.createElement("div")
+                nb=lrc.appendChild(nb);
+                nb.style=blocks[i].style;
+
+                nb.style.left=blocks[i].x+"px"
+                nb.style.top=blocks[i].y+"px"
+                nb.classList.add("block")
+                nb.block=blocks[i];
+                nb.onclick=onblockclick;
+                nb.onmousedown=dragBlock;
+                uBlockElements.push(nb)
+
+                //Handle cursor style for the connector
+                if(blocks.length>1){
+                    tools.connection.style.cursor="grab"
+                }else{
+                    tools.connection.style.cursor="not-allowed"
+                }
+            }
+            blockElements=blockElements.concat(uBlockElements)
+        }
+
+    }
+
+    //Creates new block on dbl click
+    lr.ondblclick=function(e){console.log(e)
+        new block(e.offsetX-50,e.offsetY-10,"",null)
+        setTimeout(()=>{
+            blockElements[blockElements.length-1].onclick()
+        },200)
+    }
+
+
+    //Starts connecting on connector
+
+
+mx=0;my=0
+
+    blocks=[];
+    selectedBlockElement=null;
+    
+    //Every block in blocks (block[]) translates to one in blockElements (.block)
+    blockElements=[];
+
+    //Block especific: on click
+    function onblockclick(){
+        
+        
+        if(selectedBlockElement!=this){
+        selectionHandle(this)
+        }else{
+            
+        }
+        
+    }
+        bx=0;
+        by=0;
+    //grab function 
+    function dragBlock(e){
+        if(this==selectedBlockElement){
+            return
+        }
+        
+            bx=e.pageX;
+            this.style.transition="none"
+            by=e.pageY;
+            bcr=this.getBoundingClientRect()
+            lrc.onmousemove=(e)=>{
+                this.style.left=bcr.x-1+e.pageX-bx+"px"
+                this.style.top=bcr.y-40+e.pageY-by+"px"
+                
+                
+
+                
+            }
+            document.onmouseup=()=>{
+                this.style.transition=""
+                lrc.onmousemove=null
+                document.onmouseup=null
+            }
+        }
+    
+    //handles changes in selection
+    function selectionHandle(e){
+        moveSelection(e)
+        //Changes last selected object's cursor to grab (default)
+        if(selectedBlockElement){
+            
+            selectedBlockElement.style.cursor="grab"
+            
+        }
+        //Sets cursor to edit text        
+        e.style.cursor="text"
+
+        //Sets frontedit
+        frontedit.value=e.textContent
+        frontedit.focus();
+        selectedBlockElement=e;
+        
+        
+        
+    }
+    //De select
+    lr.onclick=function(e){
+        sel.style.top="0px"
+        sel.style.left="0px"
+        sel.style.width="0px"
+        sel.style.height="0px"
+        if(selectedBlockElement){
+            selectedBlockElement.style.cursor="grab"
+        }
+        selectedBlockElement=null
+        //Sets blocktools
+        bt.style.width="0px"
+        bt.style.height="0px"
+
+        frontedit.style.width="0px"
+        
+
+    }
+   
+    //Handles movement of selected objects
+    function moveSelection(e){
+        bcr=e.getBoundingClientRect()
+        sel.style.top=bcr.y-3+"px"
+        sel.style.left=bcr.x-3+"px"
+        sel.style.width=bcr.width+"px"
+        sel.style.height=bcr.height+"px"
+        //Sets blocktools
+        bt.style.width="65px"
+        bt.style.height="32px"
+        bt.style.top=bcr.y-32+"px";
+        bt.style.left=bcr.x+"px"
+        //Sets frontedit
+        frontedit.style.top=bcr.y+"px"
+        frontedit.style.left=bcr.x-3+"px"
+        frontedit.style.width=bcr.width+2+"px"
+        frontedit.style.height=bcr.height+2+"px"
+        frontedit.style.fontFamily=e.style.fontFamily
+        frontedit.style.fontSize=e.style.fontSize
+        frontedit.style.textAlign=e.style.textAlign
+        
+
+    }
+    //Edits from tools
+    function edit(){
+        //Set content
+        selectedBlockElement.textContent=tools.content.value
+    }
+    c=lr.getContext("2d")
+
+    tools.connection.onmousedown=function(){
+        //Get starting point
+        bcr=selectedBlockElement.getBoundingClientRect()
+        csp={x:bcr.x-1+bcr.width/2,y:bcr.y-40+bcr.height/2}
+
+        //Get available connections
+        available=[]
+        for(i in blocks){
+            if(blocks[i]!=selectedBlockElement.block){
+                if(!blocks[i].connections.includes(selectedBlockElement)){
+                    available.push({b:blocks[i],i,p:blockElements[i].getBoundingClientRect()})
+                }
+            }
+        }
+        sdi=0
+        document.onmouseup=function(){
+            console.log("connect to ")
+            selectedBlockElement.block.connections.push(available[sdi].b)
+            available[sdi].b.connections.push(selectedBlockElement.block)
+            connections.push(new connection(selectedBlockElement,blockElements[available[sdi].i]))
+
+            console.log(available[sdi])
+            document.onmouseup=null
+            lrc.onmousemove=null
+            connecting=false;
+        }
+        lrc.onmousemove=function(e){
+            mx=e.pageX-1;
+            my=e.pageY-20;
+            sd=100000
+            for(i in available){
+                d=Math.sqrt( ((available[i].p.x-mx)**2)+((available[i].p.y-my)**2))
+
+                
+                if(sd>d){
+                    sd=d
+                    sdi=i
+                }
+            }
+            
+        }
+        connecting={
+            from:selectedBlockElement
+        }
+    }
+    
+    function render(){
+        c.clearRect(0, 0, lr.width, lr.height);
+        //Render request connection
+        if(connecting){
+            c.lineWidth=20
+            c.beginPath();
+                c.moveTo(csp.x, csp.y);
+                c.lineTo(available[sdi].p.x-1+available[sdi].p.width/2,available[sdi].p.y-40+available[sdi].p.height/2);
+                c.stroke();
+            
+
+        }
+        c.lineWidth=3
+        for(i in connections){
+            fbcr=connections[i].from.getBoundingClientRect()
+            tbcr=connections[i].to.getBoundingClientRect()
+            
+            fbcr.x-=1;
+            fbcr.y-=40;
+            tbcr.x-=1;
+            tbcr.y-=40;
+            
+            c.beginPath();
+                c.moveTo(fbcr.x+fbcr.width/2,fbcr.y+fbcr.height/2);
+                c.lineTo(tbcr.x+tbcr.width/2,tbcr.y+tbcr.height/2);
+                c.stroke();
+        }
+
+
+
+        window.requestAnimationFrame( render )
+    }
+    window.requestAnimationFrame( render )
+    //Sets content from frontedit
+    frontedit.onkeyup=function(){
+        
+        tools.content.value=frontedit.value
+        edit()
+    }
+    setInterval(()=>{
+        lr.width=lr.getBoundingClientRect().width
+        lr.height=lr.getBoundingClientRect().height
+    },1000)
+</script>

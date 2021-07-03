@@ -1,0 +1,74 @@
+<style>
+    .tsc{width:400px;height:100%;border-right:solid 1px rgb(177, 177, 177);}
+    *{transition:all 1s}
+    .ats{height:calc(100% - 40px);width:100%}
+    @keyframes tsenter{
+        0%{width:0%};
+        100%{width:90%};
+    }
+    .ts{
+        width:90%;
+        height:32px;
+        border-radius: 10px;
+        border:solid 1px rgb(177, 177, 177);
+        animation:tsenter 1s;
+
+    }
+    .tstitle{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 28px;
+        width: 20px;
+        height: 100%;
+        float: left;
+        margin-left: 8px;
+    }
+    .tsdate{
+           float: right;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 8px;
+    color: grey;
+
+    }
+</style>
+
+<div class="tsc">
+    
+    <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+        <g>
+         <title>Layer 1</title>
+         <path fill="#fff" stroke="#000" opacity="NaN" d="m371,264" id="svg_1"/>
+         <line stroke="#000000" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="25.65609" x2="15.95019" y1="6.34391" x1="16.04981" fill="none"/>
+         <line transform="rotate(90 16 16)" stroke="#000000" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="25.65609" x2="15.95019" y1="6.34391" x1="16.04981" fill="none"/>
+        </g>
+       
+       </svg>
+    <div class="ats" id=ats>
+        <div class=ts id=tscopy>
+            <div class=tstitle>s</div>
+            <div class=tsdate>10:23</div>
+        </div>
+    </div>
+
+    
+</div>
+<script>
+    f=(e)=>{return document.getElementById(e)};cf=(e)=>{return document.getElementsByClassName(e)}
+    // e
+    tslist=[];
+    //Create a graphical transcript
+    function cgts(name,date){
+        //Create element
+        
+        nts=f("tscopy").cloneNode(true);
+        tslist.push({nts,date})
+
+        //Set Values
+        nts.children[0]/*Name*/.textContent=name
+        nts.children[1]/*date*/.textContent=date.getHours()
+
+
+
+        //Append
+        f("ats").appendChild(nts)
+    }
+</script>

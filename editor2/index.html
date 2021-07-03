@@ -1,0 +1,371 @@
+<style>
+    @keyframes caretblink {
+        0%{opacity: 0;}
+        50%{opacity:1}
+        100%{opacity:0;}
+    }
+    *{transition: all 1s;}
+    #editor{
+     outline:none;
+     pointer-events: none;
+    }
+    #ieditor{
+        position:absolute;
+        opacity: 0.2;
+    }
+    #caret{
+        position:absolute;
+        top:0;
+        left:0;
+        width:2px;
+        transition:all 100ms;
+        background-color: black;
+        animation: caretblink 1s linear infinite;
+    }
+    #tools{
+        width:100%;
+        height:40px;
+        background-color: black;
+    }
+    ::selection{
+        background-color: transparent;
+    }
+    #selectionmark{
+        background-color:rgb(0, 162, 255);
+        position:absolute
+    }
+    .sel{
+        background-color: rgb(0, 162, 255);position:absolute;opacity: 0.1;pointer-events: none;
+
+    }
+    </style>
+    <div id=tools>
+        <input id=fs type=number value=1>
+    </div>
+    <div id=caret></div>
+    <div id=editor contenteditable="false"><font face="Courier New"> dasd <font color="red">ll  <font color="green">ll</font></font></font><font face="Brush Script MT"> dasde</font></div>
+<div id=ieditor contenteditable="false"></div>
+
+<script>
+/*
+On selection:
+put mark on invisible editor
+
+
+
+
+
+*/
+/*
+Variable names table
+sel:  current selection
+iesel:Editor selection
+
+*/
+f = (el) => document.getElementById(el);
+cf = (el) => document.getElementsByClassName(el);
+f("ieditor").style.top = f("editor").offsetTop;
+f("ieditor").style.left = f("editor").offsetLeft;
+f("ieditor").innerHTML = f("editor").innerHTML
+mp = {}
+oe = false;
+sm = false;
+rsc = false;
+td = false
+
+function setMarks() {
+    sqs = sr.getClientRects()
+    sms = cf("sel")
+    for (el in sms) {
+        if (sms[0]) {
+            if (sms[0].remove) {
+                sms[0].remove()
+            }
+        }
+    }
+    for (i in sqs) {
+        if (sqs[i].x) {
+            sq = document.createElement("div");
+            sq.classList.add("sel");
+            sq.style.top = sqs[i].y + "px";
+            sq.style.left = sqs[i].x + "px";
+            sq.style.width = sqs[i].width + "px";
+            sq.style.height = sqs[i].height + "px";
+            document.body.appendChild(sq)
+        }
+    }
+
+}
+
+function getNodePath(node) {
+    path = [node];
+    while (path[path.length - 1]) {
+        path.push(path[path.length - 1].parentElement)
+    }
+    path.pop();
+    return path
+}
+
+function ss() {
+    if (rsc) {
+        return
+    };
+    rsc = true
+    sel = document.getSelection();
+    if (sel.rangeCount == 0) {
+        return rsc = false
+    };
+    if (!getNodePath(sel.anchorNode).includes(f("ieditor"))) {
+
+
+        oe = false
+        console.log("not in editor")
+        return rsc = false
+    }
+    oe = true
+    sr = sel.getRangeAt(0)
+
+    iesel = sel
+
+
+    if (sel.isCollapsed) {
+        setCaret()
+    } else {
+        setMarks()
+    }
+
+
+    rsc = false
+}
+
+function setCaret() {
+    sms = cf("sel")
+    for (el in sms) {
+        if (sms[0]) {
+            if (sms[0].remove) {
+                sms[0].remove()
+            }
+        }
+    }
+    ps = document.createElement("span");
+    ps.id = "ps"
+    /*
+    sr.insertNode(ps)
+    cp=f("ps").getBoundingClientRect()
+    f("caret").style.top=cp.y+"px";f("caret").style.left=cp.x+"px";f("caret").style.height=cp.height+"px"
+    sr.deleteContents();
+    */
+    cp = sr.getBoundingClientRect()
+    f("caret").style.top = cp.y + "px";
+    f("caret").style.left = cp.x + "px";
+    f("caret").style.height = cp.height + "px"
+
+}
+
+function getTree(el, n, lf) {
+    var tree = {};
+    if (!n) {
+        n = ""
+    }
+
+    lff = false
+    for (i in el.childNodes) {
+
+        if (typeof el.childNodes[i] == "object") {
+
+            if (el.childNodes[i].childNodes.length > 0) {
+                ct = getTree(el.childNodes[i], n + i + "/", lf)
+                if (typeof ct == "string") {
+                    lff = ct
+                    return lff
+                } else {
+                    tree = Object.assign(tree, (ct))
+                }
+
+            } else {
+                if (lf) {
+                    if (lf.isSameNode(el.childNodes[i])) {
+                        lff = n + i;
+                        return lff
+                    }
+                }
+                tree[n + i] = el.childNodes[i]
+
+
+            }
+        }
+
+    }
+
+    return tree
+
+}
+controls = {
+    tree: {},
+    pathTo: function(el) {
+        return getTree(f("ieditor"), "", el)
+    },
+    get tree() {
+        return getTree(f("ieditor"))
+    },
+    goLeft: function(ni) {
+        tr = this.tree
+        return Object.keys(tr)[Object.keys(tr).indexOf(ni) - 1]
+    },
+    goRight: function(ni) {
+        tr = this.tree
+        return Object.keys(tr)[Object.keys(tr).indexOf(ni) + 1]
+    }
+}
+
+function gmp(e) {
+    return {
+        pxx: e.pageX + "px",
+        pxy: e.pageY + "py",
+        x: e.pageX,
+        y: e.pageY
+    }
+}
+
+document.onselectionchange = ss
+document.onkeypress = function(e) {
+    if (!oe) {
+        return true
+    }
+    switch (e.key) {
+        case "Enter": {
+            type("\n")
+            break;
+        }
+        default: {
+            type(e.key)
+        }
+    }
+}
+
+function type(str) {
+    sr.deleteContents();
+    str = str.replaceAll(" ", "\u00A0")
+    if (str == "\n") {
+        nl = document.createElement("br");
+        
+        nr = document.createRange();
+        if(sr.startContainer.textContent.length==sr.startOffset){
+            lsr=[sr.startContainer,sr.startOffset]
+            sr.startContainer.textContent+="\u00A0"
+            sr.setStart(lsr[0],lsr[1])
+            
+
+        }
+         
+        nr.setStart(sr.startContainer, sr.startOffset + 1)
+        sr.insertNode(nl);
+        nr.setStart(nr.startContainer, 0);
+        nr.collapse(true)
+        sel.removeAllRanges();
+        sel.addRange(nr)
+    } else {
+        so = sr.startOffset
+        sr.startContainer.textContent = sr.startContainer.textContent.slice(0, sr.startOffset) + str + sr.startContainer.textContent.slice(sr.startOffset)
+
+        sr.setStart(sr.startContainer, so + str.length);
+        sr.setEnd(sr.startContainer, so + str.length);
+        sr.collapse(false)
+    }
+
+
+    setCaret()
+    f("editor").innerHTML = f("ieditor").innerHTML
+}
+document.onkeydown = (e) => {
+
+    if (oe) {
+        switch (e.key) {
+            case "Tab": {
+                e.preventDefault();
+                type("\u00A0\u00A0\u00A0\u00A0")
+
+                sr.collapse(false)
+                document.getSelection().removeAllRanges();
+                document.getSelection().addRange(sr);
+                break;
+
+            }
+            case "Backspace": {
+                if (sr.startOffset == sr.endOffset) {
+                    if (sr.startOffset > 0) {
+                        sr.setStart(sr.startContainer, sr.startOffset - 1)
+                        sr.deleteContents();
+
+                        setCaret()
+                        f("editor").innerHTML = f("ieditor").innerHTML
+                    } else {
+
+                        ln = controls.tree[controls.goLeft(controls.pathTo(sr.startContainer))]
+                        if (sr.startContainer.textContent.length == 0) {
+                            td = sr.startContainer
+                        }
+                        sr.setStart(ln, ln.textContent.length);
+                        sr.collapse(true)
+
+                        sr.setStart(sr.startContainer, sr.startOffset - 1)
+                        sr.deleteContents();
+
+                        setCaret()
+                        if (td) {
+                            td.remove();
+                            td = false
+                        }
+                        f("editor").innerHTML = f("ieditor").innerHTML
+                    }
+
+                } else {
+
+
+                    sr.deleteContents();
+                    setCaret()
+                    f("editor").innerHTML = f("ieditor").innerHTML
+                }
+
+                break
+            }
+            case "ArrowLeft": {
+                if (sr.startOffset > 0) {
+                    rsc = true
+                    sr.setStart(sr.startContainer, sr.startOffset - 1);
+                    sr.collapse(true)
+                    rsc = false
+
+                } else {
+                    ln = controls.tree[controls.goLeft(controls.pathTo(sr.startContainer))]
+
+                    sr.setStart(ln, ln.textContent.length - 1);
+                    sr.collapse(true)
+
+                }
+
+                e.preventDefault();
+                break
+            }
+            case "ArrowRight": {
+                if (sr.startOffset < sr.startContainer.textContent.length) {
+                    rsc = true
+                    sr.setStart(sr.startContainer, sr.startOffset + 1);
+                    sr.collapse(true)
+                    rsc = false
+
+                } else {
+                    ln = controls.tree[controls.goRight(controls.pathTo(sr.startContainer))]
+                    sr.setStart(ln, 0);
+                    sr.collapse(true)
+
+                }
+                setCaret()
+                e.preventDefault();
+                break
+            }
+
+        }
+    }
+}
+</script>
