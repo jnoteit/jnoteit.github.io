@@ -1,1 +1,163 @@
- 
+ <style>
+ @keyframes fromLeft{
+		0%{position:relative;width:0px};
+		
+		100%{};
+	}
+	*{font-family:ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace!important}
+	.center{
+		display: grid;
+		place-items: center;
+	}		
+	
+
+
+
+
+	html,body{
+		margin:0;
+		padding:0px;
+		overflow:hidden;
+	}
+		
+	 .loginContainer{
+		width:300px;
+		
+		overflow:hidden;
+		height:400px;
+		background-color: #a9c4d1;
+		transition:background-color 1s;
+		border:solid 1px rgb(0, 140, 255);
+		border-radius: 25px;
+	 }
+	 .allowwide{
+		 width:1000px;
+		 height:81px;
+	 }
+	 .signcontainer{
+		width:150px;
+		margin:0;
+		float:left;
+		cursor:pointer;
+		border-bottom:solid 1px rgb(0, 140, 255);
+		
+	 }
+	 .signcontainer:hover{
+		background-color: rgb(80, 176, 255);
+	 }
+	 .signupcontainer{
+		border-left: solid 1px rgb(0, 140, 255);
+		
+	 }
+	 .loginform{
+		width:100%;
+		height:318px;
+	 }
+	 input,button{
+		border:none;
+		border:solid 2px rgb(0, 140, 255) ;
+		transition: all 1s cubic-bezier(1,0,0,1);
+		outline:none;
+		border-radius: 25px;
+		background:none;
+	 }
+	 input:focus,button:focus{
+		background-color: rgb(0, 140, 255);
+		border-bottom:solid 4px rgb(0, 255, 149);
+	 }
+</style>
+
+<div class=loginContainer style="text-align: center;" id="loginContainer">
+	<div class="allowwide">
+		<div class=" signcontainer  " onclick="change(true)">
+			<h1>Sign in</h1>
+		</div>
+		<div class=" signupcontainer signcontainer"  onclick="change(false)">
+			<h1>Sign up</h1>
+		</div>
+	</div>
+	<div style="
+		margin: auto;
+		overflow: hidden;
+		height: 120px;
+		margin-top: 100px;
+	">
+	<label for="email">Email</label>
+		<input type="email" id=email style="margin-bottom:10px">
+		<label for="pass" style="margin-left:30px">Password</label>
+		<input type="password" style="margin-bottom:10px" id=pass>
+		<div id=signuptoogle>
+			<label for="cpass" >confirm </label>
+			<input type="password" id=cpass>
+		</div>
+		<button id=action style="margin-top:10px">Sign In</button>
+	</div>
+</div>
+<script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-app.js"></script><script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-database.js"></script><script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-auth.js"></script><!-- Initialize Firebase --><script src="https://jnoteit.web.app/__/firebase/init.js"></script>
+<script>f=(f)=>document.getElementById(f);
+mode=true;
+function autherror(){
+		f("loginContainer").style.backgroundColor="#d1a9a9";
+	setTimeout(()=>{
+		f("loginContainer").style.backgroundColor="";
+	},3000)
+	console.log("autherror")
+}
+function authsucess(){
+		f("loginContainer").style.backgroundColor="rgb(0, 255, 149)";
+		window.parent.re=function(){
+			setTimeout(()=>{window.parent.location.reload()},1000)
+
+		}
+		window.parent.re()
+		window.parent.f("signframe").rem()
+
+	setTimeout(()=>{
+		f("loginContainer").style.backgroundColor="";
+		
+	},3000)
+	
+}
+function check(){
+	if(mode){
+		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+		firebase.auth().signInWithEmailAndPassword(f("email").value,f("pass").value)
+		.then((userCredential) => {
+			// Signed in 
+
+			authsucess();
+			var user = userCredential.user;
+			// ...
+  		})
+  		.catch((error) => {
+			
+			var errorCode = error.code;
+			autherror();
+			
+
+			var errorMessage = error.message;
+			// ..
+	  });
+
+	}else{
+
+	}
+}
+f("action").onclick=function(){
+	check()
+}
+function change(signIn){
+	if(signIn){
+		f("action").textContent="Sign In"
+		f("signuptoogle").style.display="none"
+	}else{
+		f("signuptoogle").style.display=""
+		f("action").textContent="Create Account"
+	}
+	mode=signIn
+	
+}
+
+
+
+</script>
