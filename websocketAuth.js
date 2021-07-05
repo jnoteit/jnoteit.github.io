@@ -14,7 +14,7 @@ async function authenticate(ws,db,fuser){
         if(v.ip&&(!receivedAddress)){
             receivedAddress=true
             console.log("Attempt websocket")
-            ws=new WebSocket("ws://"+v.ip+":4096")
+            ws=new WebSocket("wss://"+v.ip+"")
             ws.onopen=start;
             ws.onerror=tryInternal;
             address=v.intip
@@ -22,7 +22,7 @@ async function authenticate(ws,db,fuser){
 
     }
 function tryInternal(){
-    ws=new WebSocket("ws://"+address+":4096")
+    ws=new WebSocket("wss://"+address+"")
     ws.onopen=start;
 
 }
@@ -86,6 +86,5 @@ User is now verified as the claimed name
     }
 }
 
-}
-)
-}
+})}
+
