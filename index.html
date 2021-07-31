@@ -172,6 +172,7 @@
 		word-break: break-all;
 		overflow: hidden;
 		animation: delayedFromLeft 5s cubic-bezier(1, 0, 0, 1);
+		cursor: pointer;
 	}
 
 	.b2 {
@@ -188,6 +189,7 @@
 		overflow: hidden;
 
 		animation: delayedFromLeft 5s cubic-bezier(1, 0, 0, 1);
+		cursor: pointer;
 	}
 
 	#startText {
@@ -368,6 +370,9 @@
 			console.log("User found, disabling sign in buttons")
 			f("signinbtn").rem()
 			f("signupbtn").textContent = "Home"
+			f("signupbtn").onclick = function () {
+				location.href = "/home"
+			}
 		}
 	})
 	setRem()

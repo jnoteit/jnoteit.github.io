@@ -1,6 +1,6 @@
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
  //Login with email input and password input + automatic wsAuth
-	function login(emailElement,passwordElement){let email=emailElement.value;let password = passwordElement.value;firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {return firebase.auth().signInWithEmailAndPassword(email, password);}).catch((error) => {var errorCode = error.code;var errorMessage = error.message;});};firebase.auth().onAuthStateChanged(function(user) {if (user) {authenticate(null,firebase.database().ref("/"),user)}});
+	function login(emailElement,passwordElement){let email=emailElement.value;let password = passwordElement.value;firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {return firebase.auth().signInWithEmailAndPassword(email, password);}).catch((error) => {var errorCode = error.code;var errorMessage = error.message;});};firebase.auth().onAuthStateChanged(function(user) {if (user) {cfuser=user; authenticate(null,firebase.database().ref("/"),user)}});
 async function authenticate(ws,db,fuser){
     return new Promise((resolve,reject)=>{
     console.log("auth")
@@ -14,7 +14,7 @@ async function authenticate(ws,db,fuser){
         if(v.ip&&(!receivedAddress)){
             receivedAddress=true
             console.log("Attempt websocket")
-            ws=new WebSocket("wss://"+v.ip+"")
+            ws=new WebSocket("ws://"+v.ip+":4096")
             ws.onopen=start;
             ws.onerror=tryInternal;
             address=v.intip
@@ -22,7 +22,7 @@ async function authenticate(ws,db,fuser){
 
     }
 function tryInternal(){
-    ws=new WebSocket("wss://"+address+"")
+    ws=new WebSocket("ws://"+address+":4096")
     ws.onopen=start;
 
 }
