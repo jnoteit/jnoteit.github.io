@@ -93,8 +93,13 @@
 		box-sizing: border-box;
 		padding-top: 30px;
 		padding-left: 20px;
+		display: flex;
+		flex-direction: row;
 	}
 
+	.pathcont>* {
+		float: left
+	}
 
 
 	.pathitem {
@@ -105,7 +110,7 @@
 		height: 40px;
 		padding: 0px 5px 0px 5px;
 		width: fit-content;
-		display: inline-block;
+
 
 		margin-right: 30px;
 		cursor: pointer;
@@ -118,6 +123,7 @@
 
 		animation: fromUp 1s cubic-bezier(1, 0, 0, 1);
 	}
+
 
 	.sc {
 		/* Selectable container (?) */
@@ -146,6 +152,8 @@
 		height: 3px;
 		margin-bottom: 4px;
 		margin-right: 30px;
+		margin-top: 10px;
+
 
 	}
 
