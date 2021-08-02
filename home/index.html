@@ -471,6 +471,37 @@
 		//Create the "create folder" icon
 		cf = f("newFolderCopy").cloneNode(true);
 		cf.classList.remove("hid");
+		cf.onclick = function () {
+			let nf = document.createElement("div");
+			nf.classList.add("pathitem");
+			nf.classList.add("file");
+			nf.textContent = "name";
+			nf.contentEditable = true;
+			nf.classList.add("sc")
+			nf = f("dircont").appendChild(nf);
+			nf.focus();
+			nf.onblur = function () {
+				let fpath = path.slice();
+				fpath.push(this.textContent)
+
+				cm.set({
+					get: "makeDir",
+					path: fpath
+				})
+
+
+				makePath(fpath)
+
+				updatePath();
+			}
+			nf.onkeydown = function (e) {
+				if (e.key == "Enter") {
+					this.blur()
+				}
+			}
+
+		}
+
 		cf = createItem.appendChild(cf);
 
 	}
