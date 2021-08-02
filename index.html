@@ -6,6 +6,12 @@
 		padding: 3px;
 	}
 
+	:root {
+		--c-c1: rgb(0, 174, 255);
+		--c-c2: rgb(0, 255, 149);
+		animation: change 1s infinite cubic-bezier(1, 0, 0, 1);
+	}
+
 	.right {
 		transform: rotate(-45deg);
 		-webkit-transform: rotate(-45deg);
@@ -26,288 +32,582 @@
 		-webkit-transform: rotate(45deg);
 	}
 
-	@keyframes fromLeft {
+	@keyframes fromUp {
 		0% {
-			position: relative;
-			width: 0px
+
+			height: 0px;
 		}
 
 		;
 
-		100% {}
+		100% {
+			height: 40px;
+		}
 
 		;
 	}
 
 	* {
 		font-family: ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace;
-		transition: all 1s;
-	}
-
-	.center {
-		display: grid;
-		place-items: center;
-	}
-
-
-
-
-
-	html,
-	body {
-		margin: 0;
-		padding: 0px;
-	}
-
-	body {
-
-		width: 100%;
-		height: 200%;
-		background-image: linear-gradient(rgb(255, 102, 0), rgb(255, 0, 98));
-	}
-
-	#title {
-		overflow: hidden;
-
-
-		margin-top: 10px;
-		margin-left: 30px;
-
-		animation: fromLeft 5s cubic-bezier(1, 0, 0, 1) 0s;
-
-
-	}
-
-	#title>* {
-		color: white;
-		font-size: 100px;
-
-	}
-
-	/* width */
-	::-webkit-scrollbar {
-		width: 10px;
-	}
-
-	/* Track */
-	::-webkit-scrollbar-track {
-		background: none;
-	}
-
-	/* Handle */
-	::-webkit-scrollbar-thumb {
-		background: #888;
-	}
-
-	/* Handle on hover */
-	::-webkit-scrollbar-thumb:hover {
-		background: #555;
-	}
-
-	.header {
-		background-color: rgba(0, 0, 0, 0);
-		height: 50px;
-		width: 100%;
-		box-sizing: border-box;
-		padding-top: 6px;
-
-	}
-
-	.header>* {
-		margin-right: 5px;
-
-	}
-
-	@keyframes delayedFromLeft {
-		0% {
-			position: relative;
-			width: 0px
-		}
-
-		;
-
-		20% {
-			position: relative;
-			width: 0px
-		}
-
-		;
-
-		100% {}
-
-		;
-	}
-
-	@keyframes delayedAppear {
-		0% {
-			position: relative;
-			width: 0px;
-			height: 0px
-		}
-
-		;
-
-		20% {
-			position: relative;
-			width: 0px;
-			height: 0px
-		}
-
-		;
-
-		100% {}
-
-		;
-	}
-
-	.b1 {
-
-		height: 80%;
-		border-radius: 10px;
-		background: none;
-		border: solid 1px white;
-		font-size: 30px;
-		float: right;
-		width: 175px;
-		word-break: break-all;
-		overflow: hidden;
-		animation: delayedFromLeft 5s cubic-bezier(1, 0, 0, 1);
-		cursor: pointer;
-	}
-
-	.b2 {
-		background: white;
-		color: black;
-		border: solid 1px white;
-
-		height: 80%;
-		border-radius: 10px;
-		font-size: 30px;
-		float: right;
-		width: 175px;
-		word-break: break-all;
-		overflow: hidden;
-
-		animation: delayedFromLeft 5s cubic-bezier(1, 0, 0, 1);
-		cursor: pointer;
-	}
-
-	#startText {
-		animation: delayedFromLeft 5s cubic-bezier(1, 0, 0, 1);
-		width: 500px;
-		color: white;
-		font-weight: bold;
-		word-break: break-all;
-		margin-left: 10px;
-		overflow: hidden;
-		float: left;
-		height: 40px;
 		transition: all 1s cubic-bezier(1, 0, 0, 1);
 
 	}
 
-	.ilustration {
-		animation: delayedAppear 5s cubic-bezier(1, 0, 0, 1);
-		;
-		height: 350px;
-		width: 197px;
-		background-color: rgb(255, 255, 255);
-		border-radius: 25px;
-		float: right;
-		margin-right: 100px;
-		box-sizing: border-box;
-		padding: 10px;
-	}
-
-	.ilustration2 {
-		animation: delayedFromLeft 6s cubic-bezier(1, 0, 0, 1);
-		;
-		height: 10px;
-
-		background-color: rgb(138, 134, 134);
-		border-radius: 1px;
-
-		margin-bottom: 10px;
-		box-sizing: border-box;
-
-	}
-
-	@keyframes signin {
+	@keyframes change {
 		0% {
-			height: 0px;
+			-c--c1: rgb(0, 174, 255);
+			-c--c2: rgb(0, 255, 149);
+
 		}
+
+		50% {
+			-c--c1: rgb(255, 0, 0);
+			-c--c2: rgb(255, 157, 0);
+
+		}
+
+		;
 
 		100% {
-			height: 402px
+			-c--c1: rgb(0, 174, 255);
+			-c--c2: rgb(0, 255, 149);
 		}
-
-		;
 	}
 
-	.signframe {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 302px;
-		height: 402px;
-		animation: signin 1s cubic-bezier(1, 0, 0, 1);
-		border: none;
-		transition: all 1s cubic-bezier(1, 0, 0, 1);
+	body,
+	html {
+		margin: 0px;
+		padding: 0px;
+		background: linear-gradient(var(--c-c1), var(--c-c2));
+		overflow-x: hidden;
+		overflow-y: auto;
+
+
+	}
+
+	.pathcont {
+		width: 100%;
+		background-color: rgb(0, 255, 149);
+
+		height: 100px;
+		box-sizing: border-box;
+		padding-top: 30px;
+		padding-left: 20px;
+	}
+
+
+
+	.pathitem {
+		text-align: center;
 		overflow: hidden;
+		background-color: rgb(0, 255, 149);
+		font-size: 40px;
+		height: 40px;
+		padding: 0px 5px 0px 5px;
+		width: fit-content;
+		display: inline;
+
+		margin-right: 30px;
+		cursor: pointer;
+		transition: all 1ms;
+		border-radius: 10px;
+		max-width: 200px;
+
+		cursor: pointer;
+		user-select: none;
+
+		animation: fromUp 1s cubic-bezier(1, 0, 0, 1);
+	}
+
+	.sc {
+		/* Selectable container (?) */
+		float: left;
+		margin: 10px;
+		display: block;
+	}
+
+	.file {
+		background-color: white;
+
+	}
+
+	.pathitem:hover {
+
+
+		background-color: rgb(85, 175, 137);
+	}
+
+	.file:hover {
+		background-color: rgb(0, 255, 149);
+	}
+
+	.pathsep {
+		width: 3;
+		height: 3px;
+		margin-bottom: 4px;
+		margin-right: 30px;
+
+	}
+
+	.pathsep:hover {
+		transform: rotate(45deg);
+	}
+
+	.dircont {
+		padding: 30px;
+		box-sizing: border-box;
+		width: 100%;
+		height: calc(100% - 100px);
+
+	}
+
+	.createItem {
+
+		overflow: hidden;
+		background-color: rgba(0, 255, 149, 0.3);
+		height: 32px;
+		float: left;
+		width: 32px;
+		display: block;
+		margin-top: 11px;
+
+		margin-right: 30px;
+		cursor: pointer;
+		transition: all 1ms;
+		border-radius: 10px;
+
+
+		cursor: pointer;
+		user-select: none;
+		border: dashed black;
+		animation: fromUp 1s cubic-bezier(1, 0, 0, 1);
+		transition: 1s cubic-bezier(1, 0, 0, 1);
+
+	}
+
+	.createItem:hover {
+		width: 96px;
+		background-color: rgba(0, 255, 149, 0.5)
+	}
+
+	.hid {
+		display: none;
+	}
+
+	.createDropDown {
+		background-color: white;
+		width: 32px;
+		height: 32px;
+		box-sizing: border-box;
+		padding: 11px 0px 0px 11px;
+
+	}
+
+	.createItem>* {
+		float: left;
+		margin: 0px;
+	}
+
+	.createItem>*:hover {
+		background-color: rgba(0, 255, 149, 1);
+	}
+
+	.frameCont {
+		width: 500px;
+		height: 600px;
+		background-color: rgb(0, 174, 255);
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		transition: top 0s, left 0s, height 1s;
+		overflow: hidden;
+	}
+
+	.frameDrag {
+		width: 450px;
+		margin: 25px;
+		height: 50px;
+		background-color: rgb(0, 255, 149);
+		font-size: 45px;
+		text-align: center;
+		cursor: grab;
+		user-select: none;
+	}
+
+	.frame {
+		height: 500px;
+		width: 100%;
 		outline: none;
+		border: none;
+	}
+
+	.garbageZone {
+		background-color: rgba(255, 0, 0, 0.671);
+		width: 100%;
+		height: 150px;
+		position: absolute;
+		top: calc(100% - 150px);
+	}
+
+	.openZone {
+		background-color: rgba(0, 162, 255, 0.76);
+		width: 150px;
+		height: 150px;
+		position: absolute;
+		left: calc(100% - 150px);
+		top: 0%;
 	}
 </style>
-<div class=header><button class=b2 id=signupbtn>Sign Up</button><button class=b1 id=signinbtn>Sign in</button></div>
-
-
-
-<div id=titlecontainer class=center>
-	<div id=title class=titlecentercontainer>
-		<h1 style="float:left;margin:none;">Note</h1>
-		<h1 style="float:left;margin:none;font-family:'Times New Roman', Times, serif;color:rgb(0, 238, 255)">it
-		</h1>
-	</div>
+<div class="openZone" id=openZone></div>
+<div class="garbageZone" id=garbageZone></div>
+<div class="hid frameCont" id=frameContCopy>
+	<div class="frameDrag">FileName</div>
+	<iframe class="frame"></iframe>
 </div>
 
-<p id="startText">Noteit, undefinedundefinedundefinedundefinedundefined</p>
-<div class=ilustration>
-	<div class=ilustration2 style='width:30%;margin-left:auto;margin-right:auto'></div>
-	<div class=ilustration2 style='width:80%;'></div>
-	<div class=ilustration2 style='width:90%;'></div>
-	<div class=ilustration2 style='width:85%;'></div>
-	<div class=ilustration2 style='width:10%;'></div>
-	<div class=ilustration2 style='width:0%;'></div>
-	<div class=ilustration2 style='width:30%;margin-left:auto;margin-right:auto'></div>
-	<div class=ilustration2 style='width:90%;'></div>
-	<div class=ilustration2 style='width:60%;'></div>
-	<div class=ilustration2 style='width:75%;'></div>
-	<div class=ilustration2 style='width:40%;'></div>
-	<div class=ilustration2 style='width:0%;'></div>
+<div class="createDropDown hid" id="dropDownArrowCopy" class="hid">
+	<div class="down arrow"></div>
 </div>
-<div class=ilustration style="width:300px">
-	<div class=ilustration2 style='width:30%;margin-left:auto;margin-right:auto'></div>
-	<div class=ilustration2 style='width:90%;'></div>
-	<div class=ilustration2 style='width:60%;'></div>
-	<div class=ilustration2 style='width:75%;'></div>
-	<div class=ilustration2 style='width:40%;'></div>
-	<div class=ilustration2 style='width:0%;'></div>
-	<div class=ilustration2 style='width:30%;margin-left:auto;margin-right:auto'></div>
-	<div class=ilustration2 style='width:80%;'></div>
-	<div class=ilustration2 style='width:90%;'></div>
-	<div class=ilustration2 style='width:85%;'></div>
-	<div class=ilustration2 style='width:10%;'></div>
+<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" id="newFolderCopy" class='hid'>
 
+	<g>
+		<title>Layer 1</title>
+		<g id="svg_30">
+			<line stroke="#000" id="svg_21" y2="25.1946" x2="4.4399" y1="6.18698" x1="4.4399" fill="none" />
+			<line id="svg_22" y2="24.68655" x2="28.13351" y1="24.68655" x1="4.3774" stroke="#000" fill="none" />
+			<line id="svg_23" y2="9.93357" x2="27.43936" y1="24.62405" x1="27.43936" stroke="#000" fill="none" />
+			<line id="svg_24" y2="10.37438" x2="18.80891" y1="10.37438" x1="27.43936" stroke="#000" fill="none" />
+			<line id="svg_25" y2="5.87405" x2="14.93922" y1="10.31189" x1="19.37705" stroke="#000" fill="none" />
+			<line id="svg_26" y2="6.18698" x2="3.86649" y1="6.18698" x1="15.31465" stroke="#000" fill="none" />
+			<line id="svg_27" y2="14.65383" x2="7.68983" y1="24.68655" x1="7.68983" stroke="#000" fill="none" />
+			<line id="svg_29" y2="15.18677" x2="27.37696" y1="15.18677" x1="7.68983" stroke="#000" fill="none" />
+		</g>
+	</g>
+</svg>
+<svg width="32" height="32" id="newFileCopy" xmlns="http://www.w3.org/2000/svg" class="hid">
 
+	<g>
+		<title>Layer 1</title>
+		<g id="svg_20">
+			<path id="svg_13" d="m8.46759,5.93699" opacity="NaN" stroke="#000" fill="#fff" />
+			<line stroke="#000" id="svg_15" y2="29.24894" x2="6.90513" y1="6.56197" x1="7.14972" fill="none" />
+			<line id="svg_16" y2="29.12395" x2="25.15737" y1="29.12395" x1="6.84263" stroke="#000" fill="none" />
+			<line id="svg_17" y2="12.16729" x2="24.65471" y1="29.06145" x1="24.65471" stroke="#000" fill="none" />
+			<line stroke="#000" id="svg_18" y2="6.9524" x2="18.84235" y1="12.49933" x1="24.59222" fill="none" />
+			<line id="svg_19" y2="7.12446" x2="19.44517" y1="7.12446" x1="7.03013" stroke="#000" fill="none" />
+		</g>
+	</g>
+</svg>
+<div class=pathcont id=pathcont>
 
 </div>
-<iframe class='signframe' id=signframecopy src="signinframe" style='display:none'></iframe>
-<script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-app.js"></script>
-<script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-database.js"></script>
-<script src="https://jnoteit.web.app/__/firebase/8.1.1/firebase-auth.js"></script><!-- Initialize Firebase -->
-<script src="https://jnoteit.web.app/__/firebase/init.js"></script>
-<script src="websocketAuth.js"></script>
+
+<div class=dircont id=dircont>
+
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-analytics.js"></script>
 <script>
+	var firebaseConfig = {
+		apiKey: "AIzaSyACmf4HAlitjFHQ7aoBesSkhwTyPNoFb3k",
+		authDomain: "jnoteit.firebaseapp.com",
+		databaseURL: "https://jnoteit-default-rtdb.firebaseio.com",
+		projectId: "jnoteit",
+		storageBucket: "jnoteit.appspot.com",
+		messagingSenderId: "298183827268",
+		appId: "1:298183827268:web:aa74a7cf08dd7bfe480111",
+		measurementId: "G-MS82JHV9PL"
+	};
+	firebase.initializeApp(firebaseConfig);
+	firebase.analytics();
+</script>
+<script src="../rangen.js"></script>
+
+<script src="../commsapi.js"></script>
+<script src="../util.js"></script>
+<script>
+	//This object represents the user's root,
+	//it only contains objects, down the tree objects will have properties that
+	//are set to false, this means they haven't been loaded yet
+	user = false;
+	pathProcessor = {};
+	f = (e) => document.getElementById(e);
+
+	//The path is an array of strings, this is due to the fact elements can have a slah (/) in their names
+	path = [];
+	//List of loaded paths
+	loadedPaths = []
+	//List of loaded files
+	loadedFiles = [];
+
+	f("openZone").style.height = "0px"
+	f("garbageZone").style.height = "0px"
+	f("garbageZone").style.top = window.innerHeight + "px"
+	//Code for acessing path from url
+	if (location.href.includes("?")) {
+
+		try {
+			path = JSON.parse(decodeURIComponent(location.href.slice(location.href.lastIndexOf("?") + 1, location.href
+				.length)))
+		} catch (e) {
+
+			history.pushState("data", document.title, "?" + JSON.stringify(path))
+		}
+	}
+
+	/*
+	function for showing the path on the breadcrumb
+	1] remove already rendered path
+	2] render new one
+	*/
+
+	function renderPath() {
+
+		f("pathcont").innerHTML = ""; //1]
+		paths = []
+
+
+		//Create Arrow for root
+		let npa = document.createElement("div");
+		npa.onclickpath = [];
+		npa.onclick = function () {
+			path = this.onclickpath;
+			updatePath();
+		}
+		npa.classList.add("arrow", "right", "pathsep");
+		f("pathcont").appendChild(npa);
+		for (i in path) {
+
+			//Create text element
+
+			paths.push(path[i])
+
+
+
+			let npe = createPathItem(path[i], paths.slice());
+
+			f("pathcont").appendChild(npe)
+
+			//Create arrow
+			let npa = document.createElement("div");
+			npa.onclickpath = path.slice();
+			npa.onclick = function () {
+				path = this.onclickpath;
+				updatePath();
+			}
+			npa.classList.add("arrow", "right", "pathsep");
+			f("pathcont").appendChild(npa);
+
+
+
+		}
+
+	}
+	//Sets pathitems graphically outside of the breadcrumb
+	function pathSet(dirs) {
+		f("dircont").innerHTML = ""
+
+		for (i in dirs) {
+
+
+			let itemPath = path.slice();
+			itemPath.push(dirs[i])
+			f("dircont").appendChild(createPathItem(dirs[i], itemPath, true))
+		}
+		var createItem = document.createElement("div");
+		createItem.classList.add("createItem");
+		f("dircont").appendChild(createItem);
+		let cida = f("dropDownArrowCopy").cloneNode(true);
+		cida.classList.remove("hid");
+
+		//Create the "create file" icon
+		let cf = f("newFileCopy").cloneNode(true);
+		cf.classList.remove("hid");
+		cf.onclick = function () {
+			let nf = document.createElement("div");
+			nf.classList.add("pathitem");
+			nf.classList.add("file");
+			nf.textContent = "name";
+			nf.contentEditable = true;
+			nf.classList.add("sc")
+			nf = f("dircont").appendChild(nf);
+			nf.focus();
+			nf.onblur = function () {
+				let fpath = path.slice();
+				fpath.push(this.textContent)
+
+				cm.set({
+					get: "write",
+					content: "new file",
+					path: fpath
+				})
+
+				loadedFiles.push(JSON.stringify(fpath));
+				makePath(fpath)
+
+				updatePath();
+			}
+			nf.onkeydown = function (e) {
+				if (e.key == "Enter") {
+					this.blur()
+				}
+			}
+
+		}
+
+		createItem.appendChild(cida);
+		createItem.appendChild(cf);
+
+		//Create the "create folder" icon
+		cf = f("newFolderCopy").cloneNode(true);
+		cf.classList.remove("hid");
+		cf = createItem.appendChild(cf);
+
+	}
+	//Receive message code, only authorized nonce-confirmed server messages from the commsAPI (note that nonce-confirmed means that it is for the same client, not at all more secure)
+	cm.onvalue(function (v) {
+		v = v.val();
+
+
+		if (v.from == "server") {
+			if (v.get == "scanDir") {
+
+
+				loadedPaths.push(JSON.stringify(path));
+				pathSet(v.dirs)
+				setTimeout(() => {
+					updatePath();
+				})
+			}
+		}
+	})
+	//Adds some path to the path processor
+	function makePath(mpath) {
+		let ret = {}
+		if (mpath[mpath.length - 1] == undefined) {
+			mpath.pop()
+		}
+
+		for (let i = mpath.length - 1; i > (-1); i--) {
+			ret = {
+				[mpath[i]]: ret
+			}
+		}
+
+		pathProcessor = mergeDeep({}, pathProcessor, ret);
+	}
+	//Acesses paths from path processor (like dirRead but from the local pathprocessor, returns false if can't find)
+	function accessPath(apath) {
+		acc = pathProcessor;
+		for (i in apath) {
+
+			acc = acc[apath[i]]
+			if (!acc) {
+				return false
+			} else if (Object.keys(acc).length == 0) {
+				return false
+			}
+		}
+		if (Object.keys(acc).length == 0) {
+
+			return false;
+		} else {
+			return acc
+		}
+	}
+	//Creates div with pathitem class, and sets values to it
+	function createPathItem(itemPath /*Path*/ , setpath /*Name (Or path if in breadcrumb)*/ , sc) {
+		let npe = document.createElement("div");
+
+		var ocp = setpath.slice();
+		ocp.pop();
+
+		var afp = setpath.slice();
+		if (afp[afp.length - 1].name) {
+			afp[afp.length - 1] = afp[afp.length - 1].name
+		}
+
+
+
+		npe.classList.add("pathitem");
+		if (sc) {
+			npe.classList.add("sc")
+		}
+		npe.onclickpath = setpath;
+
+		if (itemPath.type == "file" || loadedFiles.includes(JSON.stringify(setpath))) {
+			if (loadedFiles.includes(JSON.stringify(setpath))) {
+				npe.textContent = itemPath;
+			} else {
+				loadedFiles.push(JSON.stringify(afp))
+				npe.textContent = itemPath.name;
+			}
+
+			npe.classList.add("file")
+
+
+			npe.ondblclick = function () {
+
+				createEditorFrame("/editor?" + JSON.stringify(this.onclickpath), this.onclickpath[this.onclickpath
+					.length - 1])
+
+
+
+			}
+
+			makePath(afp)
+
+		} else {
+			npe.textContent = itemPath;
+			npe.ondblclick = function () {
+
+				path = this.onclickpath;
+				updatePath();
+			}
+			makePath(setpath)
+		}
+
+
+
+
+
+		return npe;
+	}
+	firebase.auth().onAuthStateChanged(function (fuser) {
+
+		if (fuser) {
+			updatePath()
+		}
+	})
+	//Update path (Full)
+
+	function updatePath() {
+		history.pushState("data", document.title, "?" + JSON.stringify(path))
+		renderPath()
+		av = accessPath(path)
+		if (loadedPaths.includes(JSON.stringify(path))) {
+
+			pathSet(Object.keys(av));
+		} else {
+			cm.set({
+				get: "scanDir",
+				dir: path
+			})
+		}
+
+	}
+
+	function rem() {
+		this.id = "deleted"
+
+		this.style.height = "0px";
+		setTimeout(() => {
+			this.remove()
+		}, 1000)
+	}
+
 	function setRem() {
 		ae = document.getElementsByTagName("*")
 		for (i in ae) {
@@ -315,65 +615,132 @@
 		}
 	}
 
-	function rem() {
-		this.id = "deleted"
-		this.style.left = "-25%";
-		this.style.height = "0px";
-		setTimeout(() => {
-			this.remove()
-		}, 1000)
-	}
-	auth = firebase.auth();
+	function createEditorFrame(l, title) {
 
-	f = (f) => document.getElementById(f);
+		let nef = f("frameContCopy").cloneNode(true);
+		nef.classList.remove("hid");
+		let drg = nef.children[0];
+		drg.textContent = title;
+		nef.children[1].src = l;
+		//Dragging default
+		drg.onmousedown = function (e2) {
+			console.log("drag")
+			f("openZone").style.height = "150px"
+			f("garbageZone").style.height = "150px"
+			f("garbageZone").style.top = window.innerHeight - 150 + "px"
 
-	f("signinbtn").onclick = function () {
-		console.log("signin")
-		if (f("signframe")) {
-			f("signframe").rem()
-		}
-		nsf = f("signframecopy").cloneNode(true)
-		nsf.style.display = ""
-		nsf.id = "signframe"
-		nsf.rem = function () {
-			this.id = "deleted"
-			this.style.left = "-25%";
-			this.style.height = "0px";
-			setTimeout(() => {
-				this.remove()
-			}, 1000)
-		}
-		nsf = document.body.appendChild(nsf)
-		nsf.onload = () => nsf.contentWindow.change(true)
-	}
-	f("signupbtn").onclick = function () {
-		console.log("signin")
-		if (f("signframe")) {
-			f("signframe").rem()
-		}
-		nsf = f("signframecopy").cloneNode(true)
-		nsf.style.display = ""
-		nsf.id = "signframe"
-		nsf.rem = function () {
-			this.id = "deleted"
-			this.style.left = "-25%";
-			this.style.height = "0px";
-			setTimeout(() => {
-				this.remove()
-			}, 1000)
-		}
-		nsf = document.body.appendChild(nsf)
-		nsf.onload = () => nsf.contentWindow.change(false)
-	}
-	firebase.auth().onAuthStateChanged(function (user) {
-		if (user) {
-			console.log("User found, disabling sign in buttons")
-			f("signinbtn").rem()
-			f("signupbtn").textContent = "Home"
-			f("signupbtn").onclick = function () {
-				location.href = "/home"
+			lx = e2.pageX;
+			ly = e2.pageY;
+			dx = this.parentElement.getBoundingClientRect().x;
+			dy = this.parentElement.getBoundingClientRect().y;
+			rx = dx + this.parentElement.getBoundingClientRect().width
+
+
+			document.onmousemove = (e) => {
+				if ((e.pageX - lx) + dx > 0 && (e.pageX - lx) + rx < window.innerWidth) {
+					this.parentElement.style.left = (e.pageX - lx) + dx + "px";
+				}
+				if ((e.pageY - ly) + dy > 0 && (e.pageY - ly) + dy < window.innerHeight) {
+					this.parentElement.style.top = (e.pageY - ly) + dy + "px";
+				}
+				rx = dx + this.parentElement.getBoundingClientRect().width
+
+				dx = (e.pageX - lx) + dx;
+				dy = (e.pageY - ly) + dy;
+				lx = e.pageX;
+				ly = e.pageY;
+
 			}
+
+
+			document.onmouseup = () => {
+				f("openZone").style.height = "0px"
+				f("openZone").style.height = "0px"
+				f("garbageZone").style.height = "0px"
+				f("garbageZone").style.top = window.innerHeight + "px"
+
+
+				document.onmousemove = null;
+
+				document.onmouseup = null;
+
+				dx = this.parentElement.getBoundingClientRect().x + this.parentElement.getBoundingClientRect()
+					.width;
+				dy = this.parentElement.getBoundingClientRect().y;
+				if (dy < 150 && dx > window.innerWidth - 150) {
+					console.log("open on new window");
+
+					window.open(this.parentElement.children[1].src, ranGenerate(256))
+					this.parentElement.rem()
+
+				}
+				if (dy > window.innerHeight - 150) {
+
+					this.parentElement.rem()
+				}
+			}
+
 		}
-	})
-	setRem()
+		drg.ontouchstart = function (e2) {
+			console.log("drag")
+			f("openZone").style.height = "150px"
+			f("garbageZone").style.height = "150px"
+			f("garbageZone").style.top = window.innerHeight - 150 + "px"
+
+			lx = e2.touches[e2.touches.length - 1].pageX;
+			ly = e2.touches[e2.touches.length - 1].pageY;
+			dx = this.parentElement.getBoundingClientRect().x;
+			dy = this.parentElement.getBoundingClientRect().y;
+			rx = dx + this.parentElement.getBoundingClientRect().width
+
+
+			document.ontouchmove = (e) => {
+
+				if ((e.touches[e.touches.length - 1].pageX - lx) + dx > 0 && (e.touches[e.touches.length - 1]
+						.pageX - lx) + rx <
+					window.innerWidth) {
+					this.parentElement.style.left = (e.touches[e.touches.length - 1].pageX - lx) + dx + "px";
+				}
+				if ((e.touches[e.touches.length - 1].pageY - ly) + dy > 0 && (e.touches[e.touches.length - 1]
+						.pageY - ly) + dy <
+					window.innerHeight) {
+					this.parentElement.style.top = (e.touches[e.touches.length - 1].pageY - ly) + dy + "px";
+				}
+				rx = dx + this.parentElement.getBoundingClientRect().width;
+				dx = (e.touches[e.touches.length - 1].pageX - lx) + dx;
+				dy = (e.touches[e.touches.length - 1].pageY - ly) + dy;
+				lx = e.touches[e.touches.length - 1].pageX;
+				ly = e.touches[e.touches.length - 1].pageY;
+			}
+			document.ontouchend = () => {
+				f("openZone").style.height = "0px"
+				f("openZone").style.height = "0px"
+				f("garbageZone").style.height = "0px"
+				f("garbageZone").style.top = window.innerHeight + "px"
+
+
+				document.ontouchmove = null;
+
+				document.ontouchend = null;
+
+				dx = this.parentElement.getBoundingClientRect().x + this.parentElement.getBoundingClientRect()
+					.width;
+				dy = this.parentElement.getBoundingClientRect().y;
+				if (dy < 150 && dx > window.innerWidth - 150) {
+					console.log("open on new window");
+
+					window.open(this.parentElement.children[1].src, ranGenerate(256))
+					this.parentElement.rem()
+
+				}
+				if (dy > window.innerHeight - 150) {
+
+					this.parentElement.rem()
+				}
+			}
+
+		}
+		document.body.appendChild(nef);
+		setRem();
+	}
 </script>
