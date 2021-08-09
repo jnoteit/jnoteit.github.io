@@ -114,7 +114,7 @@
 
 		margin-right: 30px;
 		cursor: pointer;
-		transition: all 1ms;
+
 		border-radius: 10px;
 
 
@@ -165,7 +165,7 @@
 		padding: 30px;
 		box-sizing: border-box;
 		width: 100%;
-		height: calc(100% - 100px);
+		height: calc(100% - 140px);
 
 	}
 
@@ -265,7 +265,29 @@
 		left: calc(100% - 150px);
 		top: 0%;
 	}
+
+	.tools {
+		background-color: rgb(255, 157, 0);
+		width: 100%;
+		height: 40px;
+
+	}
+
+	input {
+		border-radius: 10px;
+		background-color: rgb(0, 174, 255);
+		outline: none;
+		border-radius: 10px;
+		background-color: rgba(0, 174, 255, 0.2);
+		outline: none;
+		border: solid 1px rgb(0, 174, 255);
+	}
+
+	.tool {
+		margin: 9px;
+	}
 </style>
+
 <div class="openZone" id=openZone></div>
 <div class="garbageZone" id=garbageZone></div>
 <div class="hid frameCont" id=frameContCopy>
@@ -306,6 +328,11 @@
 		</g>
 	</g>
 </svg>
+<div class="tools">
+	<label for="search" class=tool>Search:</label>
+	<input class=tool type="text" id="search" onkeydown="setTimeout(()=>{search(this.value)},10)">
+
+</div>
 <div class=pathcont id=pathcont>
 
 </div>
@@ -341,7 +368,7 @@
 	//are set to false, this means they haven't been loaded yet
 	user = false;
 	pathProcessor = {};
-	f = (e) => document.getElementById(e);
+
 
 	//The path is an array of strings, this is due to the fact elements can have a slah (/) in their names
 	path = [];
@@ -413,6 +440,24 @@
 		}
 
 	}
+
+	function search(str) {
+		/**
+		 * @type {HTMLDIVELement}
+		 */
+		setRem()
+		let dircont = f("dircont");
+		for (c of dircont.children) {
+			if (c.id != "createItem") {
+
+				if (c.textContent.toUpperCase().includes(str.toUpperCase())) {
+					c.sho()
+				} else {
+					c.hid()
+				}
+			}
+		}
+	}
 	//Sets pathitems graphically outside of the breadcrumb
 	function pathSet(dirs) {
 		f("dircont").innerHTML = ""
@@ -426,6 +471,7 @@
 		}
 		var createItem = document.createElement("div");
 		createItem.classList.add("createItem");
+		createItem.id = "createItem"
 		f("dircont").appendChild(createItem);
 		let cida = f("dropDownArrowCopy").cloneNode(true);
 		cida.classList.remove("hid");
@@ -638,21 +684,6 @@
 
 	}
 
-	function rem() {
-		this.id = "deleted"
-
-		this.style.height = "0px";
-		setTimeout(() => {
-			this.remove()
-		}, 1000)
-	}
-
-	function setRem() {
-		ae = document.getElementsByTagName("*")
-		for (i in ae) {
-			ae[i].rem = rem;
-		}
-	}
 
 	function createEditorFrame(l, title) {
 
