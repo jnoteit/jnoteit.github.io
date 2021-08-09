@@ -416,7 +416,7 @@
 	//Sets pathitems graphically outside of the breadcrumb
 	function pathSet(dirs) {
 		f("dircont").innerHTML = ""
-
+		dirs.sort();
 		for (i in dirs) {
 
 
@@ -662,8 +662,9 @@
 		drg.textContent = title;
 		nef.children[1].src = l;
 		//Dragging default
+
 		drg.onmousedown = function (e2) {
-			console.log("drag")
+			this.parentElement.children[1].style["pointer-events"] = "none"
 			f("openZone").style.height = "150px"
 			f("garbageZone").style.height = "150px"
 			f("garbageZone").style.top = window.innerHeight - 150 + "px"
@@ -693,6 +694,7 @@
 
 
 			document.onmouseup = () => {
+				this.parentElement.children[1].style["pointer-events"] = "auto"
 				f("openZone").style.height = "0px"
 				f("openZone").style.height = "0px"
 				f("garbageZone").style.height = "0px"
@@ -721,7 +723,7 @@
 
 		}
 		drg.ontouchstart = function (e2) {
-			console.log("drag")
+			this.parentElement.children[1].style["pointer-events"] = "none"
 			f("openZone").style.height = "150px"
 			f("garbageZone").style.height = "150px"
 			f("garbageZone").style.top = window.innerHeight - 150 + "px"
@@ -752,6 +754,7 @@
 				ly = e.touches[e.touches.length - 1].pageY;
 			}
 			document.ontouchend = () => {
+				this.parentElement.children[1].style["pointer-events"] = "none"
 				f("openZone").style.height = "0px"
 				f("openZone").style.height = "0px"
 				f("garbageZone").style.height = "0px"
