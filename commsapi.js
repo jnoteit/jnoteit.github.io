@@ -2,7 +2,11 @@ const cm = {
 	nonces: [],
 	vclisteners: [],
 	set: function (v) {
-		idb.set(user.uid)
+		if (chasUser) {
+			idb.set(user.uid)
+		} else {
+			idb.set("anom")
+		}
 		let nonce = ranGenerate(16);
 		this.nonces.push(nonce)
 
@@ -42,12 +46,30 @@ firebase.auth().onAuthStateChanged(function (fuser) {
 	if (fuser) {
 
 		user = fuser;
-		db = firebase.database().ref("users/" + fuser.uid);
-		idb = firebase.database().ref("userreq");
-		db.on("value", (v) => {
-			cm.onrun(v)
-		});
+		commsSetup(true)
+
 
 
 	}
 })
+chasUser = "undef"
+
+function commsSetup(hasUser) {
+	if (chasUser != "undef") {
+		return console.log("has already setup as " + chasUser)
+	}
+	chasUser = hasUser;
+	if (hasUser) {
+		idb = firebase.database().ref("userreq");
+		db = firebase.database().ref("users/" + user.uid);
+	} else {
+		user = {
+			uid: false
+		}
+		idb = firebase.database().ref("userreq");
+		db = firebase.database().ref("anom/");
+	}
+	db.on("value", (v) => {
+		cm.onrun(v)
+	});
+}
