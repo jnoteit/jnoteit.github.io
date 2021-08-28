@@ -113,20 +113,23 @@
     }
 </style>
 <div id="editor" contenteditable="true">
-    Error: no response
+    Loading...
 
 </div>
+
 </body>
+
 <div id=caret contenteditable="false"></div>
 <div id=seln contenteditable="false">
     <div class="selshow">
     </div>
 </div>
+<script src="../util.js"></script>
 <script defer contenteditable="false">
     oe = false
-    cf = (el) => document.getElementsByClassName(el);
-    f = (el) => document.getElementById(el);
     mks = []
+
+    let editor = f("editor");
 
     function removeMarks(a) {
         i = 0;
@@ -173,6 +176,10 @@
         oe = false
     } // v        
     document.onselectionchange = function () {
+
+
+
+
         sel = document.getSelection();
         sr = sel.getRangeAt(0);
         if (sel.rangeCount > 0) {

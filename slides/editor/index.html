@@ -1,0 +1,745 @@
+<style>
+	* {
+		transition: all cubic-bezier(1, 0, 0, 1.37) 500ms;
+	}
+
+	.hid {
+		display: none !important;
+	}
+
+	.hierarchy,
+	.tools,
+	.pagecont {
+		background: rgb(59, 59, 59);
+		height: 100%;
+		float: left;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	.hierarchy {
+		width: 200px;
+
+	}
+
+	html,
+	body {
+		margin: 0px;
+		padding: 0px;
+	}
+
+	body {
+		display: flex
+	}
+
+	.tools {
+		width: 200px;
+		background: rgb(44, 44, 44);
+		padding-left: 4px;
+		box-sizing: border-box;
+	}
+
+	.pages {
+		width: 100%;
+		height: 70%;
+
+	}
+
+	.pagecont {
+		width: 200px;
+		border-right: solid 2px rgb(116, 116, 116)
+	}
+
+	.view {
+		height: 100%;
+		float: left;
+		flex-grow: 1;
+	}
+
+	.page {
+		width: calc(100% - 10px);
+		border-radius: 10px;
+		border: solid 7px rgb(126 126 255);
+		text-align: center;
+		height: 100px;
+		box-sizing: border-box;
+		padding-top: 27px;
+		margin: auto;
+		margin-bottom: 10px;
+		background-color: rgb(146 190 255);
+		cursor: pointer;
+		font-family: monospace;
+		font-size: 28px;
+	}
+
+	.pageselection {
+		width: 4px;
+		background-color: rgb(66, 243, 146);
+		position: absolute;
+		height: 100px;
+		box-shadow: 0 0 5px 2px rgb(66 243 146);
+	}
+
+
+
+	.cont {
+
+		width: 100%;
+		height: fit-content;
+		color: white;
+
+		border-left: solid 6px rgb(166, 166, 166);
+		border-top: solid 1px rgb(166, 166, 166);
+		border-radius: 5px;
+		display: inline-block;
+		overflow: hidden;
+		margin-bottom: 10px
+	}
+
+	.cont:hover {
+		border-left: solid 6px rgb(66, 243, 146);
+		border-top: solid 1px rgb(66, 243, 146);
+	}
+
+	.cont>*:not(.cont) {
+		float: left;
+		margin-left: 5px;
+		margin-top: 10px;
+	}
+
+	select {
+		background-color: rgb(59, 59, 59);
+		border-radius: 7px;
+		margin-left: 5px;
+		border-color: rgb(66, 243, 146);
+		color: white;
+		font-family: monospace;
+		outline: none;
+	}
+
+	.contName {
+		user-select: none;
+		font-family: 'Courier New', Courier, monospace;
+
+
+	}
+
+	.contName:hover {
+		background-color: rgb(66, 243, 146);
+	}
+
+	label {
+		font-family: monospace;
+		box-sizing: border-box;
+		padding-top: 6px;
+		color: white;
+	}
+
+	input[type="checkbox"] {
+		width: 14px;
+		box-sizing: border-box;
+		margin-bottom: 0px;
+		padding-top: 10px;
+		height: 8px;
+	}
+
+	input {
+		color: white;
+		border: solid 1px rgb(66, 243, 146);
+		width: 85px;
+		margin: 4px;
+		background-color: rgb(59, 59, 59);
+		border-radius: 10px;
+		outline: none;
+
+	}
+
+	.block {
+		width: 100%;
+		height: 18px;
+		border-color: rgb(66, 243, 146);
+		color: white;
+		font-family: monospace;
+		border-left: solid 4px;
+		background-color: rgb(44, 44, 44);
+		box-sizing: border-box;
+		padding-left: 4px;
+		padding-top: 1px;
+		overflow: hidden;
+		display: flex;
+	}
+
+	.block>* {
+		float: left
+	}
+
+	.blockName {
+		flex-grow: 1;
+		text-align: center;
+	}
+
+	.plus {
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+
+		background:
+			linear-gradient(#fff, #fff),
+			linear-gradient(#fff, #fff),
+			#000;
+		background-position: center;
+		background-size: 50% 2px, 2px 50%;
+		/*thickness = 2px, length = 50% (25px)*/
+		background-repeat: no-repeat;
+	}
+
+	.alt {
+		background:
+			linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255)),
+			linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255));
+		background-position: center;
+		background-size: 50% 2px, 2px 50%;
+		/*thickness = 2px, length = 50% (25px)*/
+		background-repeat: no-repeat;
+	}
+
+	.gselection {
+		position: absolute;
+		border: solid 4px rgb(66, 243, 146);
+	}
+
+	.gselection:hover {
+		background-color: rgba(66, 243, 146, 0.384);
+		cursor: grab
+	}
+
+	.hresize {
+		left: calc(100% + 10px);
+		height: 100%;
+		top: -4px;
+		cursor: w-resize !important
+	}
+
+	.vresize {
+		left: -4px;
+		width: 100%;
+		top: calc(100% + 10px);
+		cursor: n-resize !important
+	}
+</style>
+<div class=gselection id=selection>
+	<div class="vresize gselection"></div>
+	<div class="hresize gselection"></div>
+</div>
+<div class="block hid" id="blockcopy">
+	<svg style="margin-right: 4px;" width="16" height="16" viewBox="0 0 28 32" fill="none"
+		xmlns="http://www.w3.org/2000/svg">
+		<path
+			d="M14.75 1.01036L26.6064 7.85566C27.0705 8.12361 27.3564 8.6188 27.3564 9.1547V22.8453C27.3564 23.3812 27.0705 23.8764 26.6064 24.1443L14.75 30.9896C14.2859 31.2576 13.7141 31.2576 13.25 30.9896L1.39359 24.1443C0.929492 23.8764 0.643594 23.3812 0.643594 22.8453V9.1547C0.643594 8.6188 0.929492 8.12361 1.39359 7.85566L13.25 1.01036C13.7141 0.742414 14.2859 0.742414 14.75 1.01036Z"
+			fill="#42F392" stroke="#A6A6A6" />
+	</svg>
+	<div class=blockName>hello</div>
+</div>
+
+<div class="pageselection" id="pageselection"></div>
+<div class="pagecont">
+	<div class="plus alt hid" id="createButtonCopy"></div>
+	<div class="page createpage" id="createpage" style="height: 49px;
+		background-color: rgb(66, 243, 146);
+		padding-top: 0px;" onclick="createPage('name...')">+</div>
+	<div id=pages class="pages"></div>
+</div>
+<div id=hierarchy class="hierarchy"></div>
+<iframe id=view class="view" src="frame.html"></iframe>
+<div id=tools class="tools"></div>
+<script src="../../util.js"></script>
+<script src="../../rangen.js"></script>
+<script defer=true>
+	/**
+			Pages 
+			{name,isBetween,betweenTime,content}
+			content: arrayable object
+
+			value.service = slides
+
+
+			block 
+			{type:"selectable"
+			style:CSSString
+			name:name,
+			content:HTMLContent
+
+		
+		
+		}
+
+
+		*/
+	var pages = [];
+
+	const epages = f("pages");
+	const pageselection = f("pageselection");
+	const tools = f("tools");
+	const hierarchy = f("hierarchy");
+	const blockcopy = f("blockcopy");
+	const view = f("view");
+	view.onload = () => {
+		viewBody = view.contentDocument.body;
+		createPage("home page")
+	}
+
+	view.contentWindow.sel = f("selection");
+	const sel = f("selection")
+	const isEditor = true
+	const pageTools = {
+		"page settings": {
+			0: {
+				type: "input",
+				name: "name",
+				inputtype: "text"
+			},
+			animation: [{
+					type: "input",
+					name: "is inBetween",
+					inputtype: "checkbox"
+				},
+				{
+					type: "input",
+					name: "seconds",
+					inputtype: "number"
+				}
+			]
+		}
+	}
+
+	const cssTools = {
+		element: [{
+				type: "input",
+				inputtype: "text",
+				name: "name"
+			},
+			{
+				type: "input",
+				inputtype: "text",
+				name: "text"
+			},
+		],
+		properties: [{
+				type: "input",
+				inputtype: "number",
+				name: "width"
+			},
+			{
+				type: "input",
+				inputtype: "number",
+				name: "height"
+			},
+			{
+				type: "input",
+				inputtype: "number",
+				name: "x"
+			},
+			{
+				type: "input",
+				inputtype: "number",
+				name: "y"
+			},
+
+
+
+
+		],
+		style: [{
+				name: "font color",
+				type: "input",
+				inputtype: "color"
+			},
+			{
+				name: "background color",
+				type: "input",
+				inputtype: "color"
+			},
+			{
+				type: "select",
+				name: "font",
+				options: [{
+						value: "'Courier New', Courier, monospace",
+						name: "Mono"
+					},
+					{
+						value: "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif",
+						name: "Calibri"
+					},
+					{
+						value: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+						name: "Geneva"
+					},
+					{
+						value: "'Times New Roman', Times, serif",
+						name: "Times"
+					},
+					{
+						value: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+						name: "Impact"
+					},
+					{
+						value: "cursive",
+						name: "Cursive"
+					}
+				]
+			}
+		]
+
+	}
+	var selection = {
+		type: "page",
+		index: 0,
+		onchange: function () {},
+		set: function (v) {
+			let nonce = false;
+			if (v.ref) {
+				nonce = v.index + ranGenerate(16);
+				v.ref.id = nonce;
+
+				v.ref = undefined;
+			}
+
+
+			selection.ref = undefined;
+			selection = mergeDeep({}, selection, v);
+
+			if (nonce) {
+				selection.ref = f(nonce);
+				selection.ref.id = selection.ref.id.slice(0, -16)
+			}
+			selection.onchange();
+		}
+	}
+	var selectedPage = 1;
+	var ltoolsContent = ""
+
+	function setGObject(toolsObject, elementToUse, useInputs, useCreateButtons) {
+		elementToUse.innerHTML = "";
+		if (useInputs) {
+			inputs = []
+		}
+
+		function recursive(rtoolsObject, element, useInputs) {
+			for (i in rtoolsObject) {
+				if (rtoolsObject[i].type) {
+					if (rtoolsObject[i].type == "input") {
+						let label = document.createElement("label");
+						let nonce = rtoolsObject[i].name + "-" + Date.now() + ranGenerate(16);
+						label.htmlFor = nonce;
+
+						label.textContent = rtoolsObject[i].name;
+						let input = document.createElement("input");
+						input.type = rtoolsObject[i].inputtype;
+						input.id = nonce;
+						let nelement = document.createElement("div");
+						nelement.appendChild(label);
+						if (useInputs) {
+							inputs.push(nelement.appendChild(input));
+						}
+						element.appendChild(nelement)
+					} else
+					if (rtoolsObject[i].type == "select") {
+						let nelement = document.createElement("div");
+						let nonce = rtoolsObject[i].name + "-" + Date.now() + ranGenerate(16);
+						let select = createSelect(rtoolsObject[i].options);
+						let label = document.createElement("label");
+
+						select.id = nonce;
+						label.htmlFor = nonce;
+						label.textContent = rtoolsObject[i].name;
+
+
+
+						nelement.appendChild(label)
+						if (useInputs) {
+							inputs.push(nelement.appendChild(select));
+						}
+						element.appendChild(nelement);
+					} else
+					if (rtoolsObject[i].type == "selectable") {
+						let nelement = blockcopy.cloneNode(true);
+						nelement.classList.remove("hid");
+						nelement.children[1].textContent = rtoolsObject[i].name;
+						nelement.index = i;
+						nelement.selection = new blockSelection(nelement)
+						if (!rtoolsObject[i].customonclick) {
+							rtoolsObject[i].customonclick = function () {}
+						}
+
+						nelement.customonclick = rtoolsObject[i].customonclick
+						delete rtoolsObject[i].customonclick
+
+						nelement.onclick = function (e) {
+							if (selection.ref) {
+								selection.ref.style.borderLeftColor = "white"
+							}
+							selection.set(this.selection.copy())
+							this.customonclick(e);
+							this.style.borderLeftColor = "rgb(66, 243, 146)"
+
+
+						}
+						element.appendChild(nelement);
+
+
+					}
+				} else {
+					let cont = document.createElement("div");
+					let name = document.createElement("div");
+					name.classList.add("contName")
+					name.isCollapsed = false;
+					name.onclick = function () {
+
+						this.isCollapsed = !this.isCollapsed;
+						if (this.isCollapsed) {
+							this.parentElement.style.height = "calc(1em + 20px)"
+							this.parentElement.style.cursor = "zoom-in"
+						} else {
+							this.parentElement.style.cursor = "zoom-out"
+							this.parentElement.style.height = "fit-content"
+						}
+
+					}
+					cont.classList.add("cont");
+					name.textContent = i;
+					cont.appendChild(name);
+					recursive(rtoolsObject[i], cont, useInputs)
+					element.appendChild(cont)
+				}
+			}
+
+		}
+		recursive(toolsObject, elementToUse, useInputs);
+	}
+
+	function createSelect(options) {
+
+		let selectElement = document.createElement("select");
+		for (const i of options) {
+			let optionElement = document.createElement("option");
+			optionElement.value = i.value;
+			optionElement.textContent = i.name;
+			selectElement.appendChild(optionElement)
+		}
+		return selectElement
+	}
+
+	function createPage(pageName, inBetween) {
+		pages.push({
+			name: pageName,
+			inBeetween: false,
+			inBeetweenTime: 1,
+			content: []
+		});
+
+		refreshPages();
+		selectPage(pages.length - 1)
+	}
+
+	function refreshPages() {
+		epages.innerHTML = "";
+		for (i in pages) {
+			let p = document.createElement("div")
+			p.classList.add("page")
+			p.textContent = pages[i].name;
+			p.index = i;
+			p.onclick = function () {
+				selectPage(this.index)
+			}
+			epages.appendChild(p)
+
+		}
+	}
+
+	function selectPage(pageIndex) {
+		lselectedPage = selectedPage;
+		selectedPage = pageIndex;
+		pageselection.style.top = epages.children[selectedPage].getBoundingClientRect().y;
+		setGObject(pageTools, tools, true)
+		loadPage(pages[pageIndex].content)
+		renderObjects()
+		refreshTools()
+		inputs[0].select()
+
+	}
+
+	function refreshTools() {
+		if (selection.type == "page") {
+
+			inputs[0].value = pages[selectedPage].name
+			inputs[1].value = pages[selectedPage].inBeetween
+			inputs[2].value = pages[selectedPage].inBeetweenTime
+			ltoolsContent = getToolsContent();
+		}
+	}
+
+	function getToolsContent() {
+		toolContents = ""
+		for (i in inputs) {
+			if (inputs[i].type == "checkbox") {
+				toolContents += inputs[i].checked
+			} else {
+				toolContents += inputs[i].value
+			}
+		}
+		return toolContents;
+	}
+
+	selection.onchange = function () {
+		if (selection.type == "page") {
+			setGObject(pageTools, tools, true);
+		} else {
+			setGObject(cssTools, tools, true);
+			//Element
+			inputs[0].value = pages[selectedPage].content[selection.ref.index].name
+			inputs[1].value = pages[selectedPage].content[selection.ref.index].content
+			if (pages[selectedPage].content[selection.ref.index].style) {
+				let pstyle = parseStyle(pages[selectedPage].content[selection.ref.index].style)
+
+
+
+				//Properties
+
+				inputs[2].value = pstyle.width.slice(0, -2)
+				inputs[3].value = pstyle.height.slice(0, -2)
+				inputs[4].value = pstyle.left.slice(0, -2)
+				inputs[5].value = pstyle.top.slice(0, -2)
+
+				//Style
+				inputs[6].value = pstyle.color
+				inputs[7].value = pstyle["background-color"]
+				inputs[8].value = pstyle["font-family"].slice(0, -2)
+			}
+		}
+	}
+
+
+
+	function renderObjects() {
+		if (viewBody.children.length > pages[selectedPage].content.length) {
+			for (let i = viewBody.children.length - 1; i >= pages[selectedPage].content.length; i--) {
+				viewBody.children[i].remove();
+			}
+		} else if (viewBody.children.length < pages[selectedPage].content.length) {
+			for (let i = -1; i < pages[selectedPage].content.length - viewBody.children.length; i++) {
+				let nelement = document.createElement("div");
+
+
+				nelement = viewBody.appendChild(nelement)
+				var l = 0;
+				child = nelement;
+				while ((child = child.previousSibling) != null) {
+					l++;
+				}
+				nelement.selection = new blockSelection(hierarchy.children[l])
+				nelement.onclick = function () {
+					selection.set(this.selection.copy())
+				}
+			}
+		}
+
+		for (let i in pages[selectedPage].content) {
+			viewBody.children[i].style = pages[selectedPage].content[i].style
+			viewBody.children[i].content = pages[selectedPage].content[i].content
+		}
+	}
+
+	function loadPage(pageContent) {
+		setGObject(pageContent, hierarchy, false);
+		let plus = f("createButtonCopy").cloneNode(true);
+		plus.onclick = createSelectable;
+		plus.classList.remove("hid");
+		hierarchy.appendChild(plus);
+
+
+
+
+	}
+
+	function evaluateStyle(index) {
+		let elementStyle;
+		if (index) {
+			elementStyle =
+				"width:" + inputs[2].value + "px;" +
+				"height:" + inputs[3].value + "px;" +
+				"left:" + inputs[4].value + "px;" +
+				"top:" + inputs[5].value + "px;" +
+				"color:" + inputs[6].value + ";" +
+				"background-color:" + inputs[7].value + ";" +
+				"font-family:" + inputs[8].value + ";"
+		} else {
+			elementStyle =
+				"width:" + inputs[2].value + "px;" +
+				"height:" + inputs[3].value + "px;" +
+				"left:" + inputs[4].value + "px;" +
+				"top:" + inputs[5].value + "px;" +
+				"color:" + inputs[6].value + ";" +
+				"background-color:" + inputs[7].value + ";" +
+				"font-family:" + inputs[8].value + ";"
+		}
+		pages[selectedPage].content[selection.ref.index].style = elementStyle;
+		pages[selectedPage].content[selection.ref.index].content = inputs[1].value;
+		pages[selectedPage].content[selection.ref.index].name = inputs[0].value
+		selection.ref.children[1].textContent = inputs[0].value
+		viewBody.children[selection.ref.index].style = elementStyle;
+		viewBody.children[selection.ref.index].innerHTML = inputs[1].value;
+
+		view.contentDocument.body = viewBody
+
+		return elementStyle
+
+
+	}
+
+	function createSelectable() {
+		pages[selectedPage].content.push({
+			type: "selectable",
+			name: "element"
+		})
+		loadPage(pages[selectedPage].content);
+		renderObjects();
+		//create element wherever
+		//with name x
+		//and select it
+	}
+
+
+	setInterval(() => {
+		//Set green rectangle on the left of selected page
+
+		pageselection.style.top = epages.children[selectedPage].getBoundingClientRect().y;
+
+
+
+		//Update page if tools changed
+		if (selection.type == "page") {
+			if (getToolsContent() != ltoolsContent) {
+				pages[selectedPage].name = inputs[0].value
+				pages[selectedPage].inBeetween = inputs[1].checked
+				pages[selectedPage].inBeetweenTime = parseFloat(inputs[2].value)
+				refreshPages()
+				ltoolsContent = toolContents;
+			};
+		} else if (selection.type == "block") {
+
+
+			//Visual square selection set
+
+			let br = viewBody.children[selection.ref.index].getBoundingClientRect();
+			let vbr = view.getBoundingClientRect();
+			sel.style.width = br.width
+			sel.style.height = br.height
+			sel.style.top = vbr.top + br.top
+			sel.style.left = vbr.left + br.left
+			evaluateStyle()
+
+		}
+
+
+	}, 800)
+</script>

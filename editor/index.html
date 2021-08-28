@@ -309,14 +309,15 @@
 	}
 </style>
 <div id=tools>
-	<div class=numsel><svg width="32" onclick="f('fontsize').value--" class=minusbtn height="32"
+	<div class=numsel><svg width="32" onclick="f('fontsize').value--;setTextSize();" class=minusbtn height="32"
 			xmlns="http://www.w3.org/2000/svg">
 			<g>
 				<line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="16" x2="25.84153" y1="16"
 					x1="6.15847" opacity="undefined" stroke="#000" fill="none" />
 			</g>
-		</svg><input type="number" id=fontsize value=20><svg onclick="f('fontsize').value++" width="32" class=plusbtn
-			height="32" xmlns="http://www.w3.org/2000/svg">
+		</svg><input type="number" id=fontsize value=20 onkeypress="setTextSize();"><svg
+			onclick="f('fontsize').value++;setTextSize();" width="32" class=plusbtn height="32"
+			xmlns="http://www.w3.org/2000/svg">
 			<g>
 				<line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="25.10168" x2="16"
 					y1="6.89832" x1="16" opacity="undefined" stroke="#000" fill="none" />
@@ -477,25 +478,9 @@
 </script>
 <script src="../rangen.js"></script>
 <script src="../commsapi.js"></script>
+<script src="../util.js"></script>
 <script>
-	//TODO: remove all REMOVE tagged code
-	//Change CHANGE tagged Code
-	/**
-	 *  TO
-	 * ADD 
-	 * 
-	 * commsAPI to HTML
-	 * 
-	 * 
-	 * BACKENDAPI:
-	 * 
-	 * Write: {path,content}
-	 * Read: {path}
-	 */
-
-	cf = (el) => document.getElementsByClassName(el);
-	f = (el) => document.getElementById(el);
-
+	exec = (e) => f("editor").contentWindow.exec(e);
 
 	//Locate path from URL
 	if (location.href.includes("?")) {
@@ -527,7 +512,13 @@
 
 
 
-
+	function createLink() {
+		cm.set({
+			get: "share",
+			service: "shared",
+			path: dpath
+		})
+	}
 
 	//DON'T TOUCH: idk how it works but it does, leave it as such.
 	document.onclick = function (e) {
@@ -539,6 +530,18 @@
 		}
 	}
 
+	//DON'T TOUCH: idk how it works but it does, leave it as such.
+	function setTextSize() {
+		let v = f("fontsize").value;
+		exec(function (el) {
+			el.style.fontSize = v + "px"
+
+
+
+			return el
+		})
+
+	}
 
 	cm.onvalue((v) => {
 		val = v.val()
@@ -562,7 +565,9 @@
 
 			}, 5000)
 		}
-
+		if (val.get == "share") {
+			window.open("../l/?" + JSON.stringify(val.path), "share", "width=200,height=500");
+		}
 
 
 
@@ -580,6 +585,7 @@
 	nots = [];
 
 	function not(color, text, imp, click) {
+
 		nnot = document.createElement("div");
 		nnot.style = "animation:not 4s;width:334px;height:66px;position:absolute;bottom:0;right:0;transition:all 1s";
 		nnot.style.backgroundColor = color;
