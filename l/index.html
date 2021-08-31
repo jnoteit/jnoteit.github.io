@@ -90,8 +90,12 @@
     if (location.href.includes("?")) {
 
         try {
-            path = JSON.parse(decodeURIComponent(location.href.slice(location.href.lastIndexOf("?") + 1, location.href
-                .length)))
+            let parsing = decodeURIComponent(location.href.slice(location.href.lastIndexOf("?") + 1, location.href
+                .length))
+            if (!parsing.endsWith("]")) {
+                parsing += "]"
+            }
+            path = JSON.parse(parsing)
         } catch (e) {
             console.log(e)
             history.pushState("data", document.title, "?" + JSON.stringify(path))
